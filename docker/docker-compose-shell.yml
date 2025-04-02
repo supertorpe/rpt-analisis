@@ -1,0 +1,6 @@
+services:
+  python-dev:
+    environment:
+      - ENTRYPOINT=shell
+    tty: true
+    stdin_open: true

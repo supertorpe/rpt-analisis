@@ -1,0 +1,86 @@
+import pandas as pd
+import numpy as np
+
+# Cargar los datos del archivo Excel
+df_stats = pd.read_excel(
+    io="/app/rpt/rpt_stats.xlsx",
+    sheet_name="statistics", # 0,
+    header=0,
+    )
+
+def print_rankings():
+    # Calcular el mean medio de todos los ministerios por Gr/Sb y Nivel
+    mean_global = df_stats.groupby(["Gr/Sb", "Nivel"])["mean"].transform("mean")
+
+    # Obtener lista de ministerios únicos
+    ministerios = df_stats["Denominación Ministerio"].unique()
+
+    resultados = []
+
+    for ministerio in ministerios:
+        df_min = df_stats[df_stats["Denominación Ministerio"] == ministerio]
+        
+        # Ordenar por Gr/Sb y Nivel
+        df_min = df_min.sort_values(by=["Gr/Sb", "Nivel"])
+        
+        # Valores en X y Y
+        x = np.arange(len(df_min))
+        y_media = (df_min["mean"] / mean_global[df_min.index]).mean()
+            
+        resultados.append((ministerio, y_media))
+
+    # Ordenar resultados
+    resultados.sort(key=lambda x: x[1])
+
+    # Mostrar resultados
+    for ministerio, area in resultados:
+        print(f"{ministerio}: {area:.2f}")
+
+
+"""
+Si para cada ministerio/organismo obtenemos el porcentaje del CE medio respecto al CE medio de todos los ministerios/organismos (agrupados por grupo/nivel). Luego obtenemos el porcentaje medio para todos los grupos/niveles, tenemos este maravilloso ranking:
+
+CONSEJO SUPERIOR DE INVESTIGACIONES CIENTIFICAS - CSIC: 0.82
+AGENCIA ESTATAL DE INVESTIGACION: 0.88
+MINISTERIO DE DEFENSA: 0.88
+MINISTERIO DE TRABAJO Y ECONOMIA SOCIAL: 0.91
+MINISTERIO DE SANIDAD: 0.91
+MINISTERIO DE CIENCIA, INNOVACION Y UNIVERSIDADES: 0.92
+MINISTERIO DE UNIVERSIDADES: 0.92
+MINISTERIO DE ASUNTOS EXTERIORES, UNION EUROPEA Y COOPERACION: 0.93
+MINISTERIO DE IGUALDAD: 0.93
+MINISTERIO DE ECONOMIA, COMERCIO Y EMPRESA: 0.93
+MINISTERIO DE VIVIENDA Y AGENDA URBANA: 0.93
+MINISTERIO DE DERECHOS SOCIALES, CONSUMO Y AGENDA 2030: 0.94
+MINISTERIO PARA LA TRANSFORMACION DIGITAL Y DE LA FUNCION PUBLICA: 0.94
+MINISTERIO DE LA PRESIDENCIA, JUSTICIA Y RELACIONES CON LAS CORTES: 0.94
+MINISTERIO DE AGRICULTURA, PESCA Y ALIMENTACION: 0.95
+AGENCIA ESPAÑOLA DE COOPERACION INTERNAC. PARA EL DESARROLLO: 0.95
+AGENCIA ESTATAL COMISION ESPAÑOLA PARA LA LUCHA ANTIDOPAJE EN EL DEPORTE: 0.95
+MINISTERIO DE JUVENTUD E INFANCIA: 0.95
+MINISTERIO DE INCLUSION, SEGURIDAD SOCIAL Y MIGRACIONES: 0.96
+AGENCIA ESPAÑOLA DE MEDICAMENTOS Y PRODUCTOS SANITARIOS: 0.96
+AGENCIA ESTATAL DE SEGURIDAD AEREA: 0.96
+MINISTERIO DE INDUSTRIA Y TURISMO: 0.97
+MINISTERIO DE TRANSPORTES Y MOVILIDAD SOSTENIBLE: 0.97
+MINISTERIO DE CULTURA: 0.97
+AGENCIA ESTATAL BOLETIN OFICIAL DEL ESTADO: 0.98
+MINISTERIO DE EDUCACION, FORMACION PROFESIONAL Y DEPORTES: 0.98
+MINISTERIO DE POLITICA TERRITORIAL Y MEMORIA DEMOCRATICA: 0.99
+MINISTERIO PARA LA TRANSICION ECOLOGICA Y EL RETO DEMOGRAFICO: 0.99
+MINISTERIO DE HACIENDA: 1.00
+AGENCIA ESTATAL DE SEGURIDAD FERROVIARIA: 1.00
+MINISTERIO DE HACIENDA Y FUNCION PUBLICA: 1.01
+AGENCIA ESTATAL AGENCIA ESPACIAL ESPAÑOLA: 1.01
+AGENCIA ESTATAL DE METEOROLOGIA: 1.05
+MINISTERIO DE JUSTICIA: 1.13
+CONSEJO DE SEGURIDAD NUCLEAR: 1.17
+MINISTERIO DE PRESIDENCIA, RELACIONES CON LAS CORTES Y MEMORIA DEMOCRATICA: 1.19
+ENTES PUBLICOS: 1.23
+MINISTERIO DEL INTERIOR: 1.27
+AGENCIA ESTATAL AGENCIA ESPAÑOLA DE SUPERVISION DE INTELIGENCIA ARTIFICIAL: 1.32
+AGENCIA ESTATAL DE ADMINISTRACION TRIBUTARIA: 1.41
+MINISTERIO DE CULTURA Y DEPORTE: 1.47
+CASA DE SU MAJESTAD EL REY: 1.83
+
+"""

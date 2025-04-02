@@ -1,0 +1,15 @@
+services:
+  python-dev:
+    build:
+      context: ..
+      dockerfile: ./docker/Dockerfile  
+    image: rpt_analisis:0.0.1
+    container_name: rpt_analisis
+    user: ${USER_ID}:${GROUP_ID}
+    working_dir: /app
+    volumes:
+      - ../app:/app
+      - ../.data/group:/etc/group
+      - ../.data/passwd:/etc/passwd
+      - ../.data/.vscode-server:/tmp/.vscode-server
+    restart: "no"

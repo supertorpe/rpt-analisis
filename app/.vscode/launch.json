@@ -1,0 +1,18 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "main",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "/app/main.py",
+            "console": "integratedTerminal",
+            "cwd": "/app",
+            "justMyCode": true,
+            "python": "/opt/venv/bin/python",
+            "env": {
+                "PYTHONPATH": "/app"
+            }
+        },
+    ]
+}
