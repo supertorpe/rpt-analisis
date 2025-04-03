@@ -1,17 +1,17 @@
+import os
 import time
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 from matplotlib.ticker import LogLocator, FuncFormatter
 
-df_stats = pd.read_excel(
-    io="/app/rpt/rpt_stats.xlsx",
-    sheet_name="statistics", # 0,
-    header=0,
-    )
-
-
 def compare(ministerio):
+    df_stats = pd.read_excel(
+        io="/app/rpt/rpt_stats.xlsx",
+        sheet_name="statistics", # 0,
+        header=0,
+        )
+
     thisone = df_stats[df_stats['Denominación Ministerio'].str.lower() == ministerio.lower()]
     others = df_stats[df_stats['Denominación Ministerio'].str.lower() != ministerio.lower()]
 
@@ -46,6 +46,12 @@ def compare(ministerio):
 
 # Función para comparar el Ministerio de Defensa con otros en porcentaje
 def compare_pct(ministerio):
+    df_stats = pd.read_excel(
+        io="/app/rpt/rpt_stats.xlsx",
+        sheet_name="statistics", # 0,
+        header=0,
+        )
+
     thisone = df_stats[df_stats['Denominación Ministerio'].str.lower() == ministerio.lower()]
     others = df_stats[df_stats['Denominación Ministerio'].str.lower() != ministerio.lower()]
 
@@ -98,6 +104,12 @@ def compare_pct(ministerio):
 
 def print_lowest_and_highest_ce():
 
+    df_stats = pd.read_excel(
+        io="/app/rpt/rpt_stats.xlsx",
+        sheet_name="statistics", # 0,
+        header=0,
+        )
+
     ministry_ce_means = df_stats.groupby('Denominación Ministerio')['mean'].mean()
         
     # Identify ministries with the lowest mean C.E.
@@ -148,6 +160,12 @@ Los ministerios con el mayor C.E. medio son:
 
 # Función para graficar el porcentaje de "mean" sobre el "mean" más alto
 def plot_percentage_over_max():
+    df_stats = pd.read_excel(
+        io="/app/rpt/rpt_stats.xlsx",
+        sheet_name="statistics", # 0,
+        header=0,
+        )
+
     # Obtener el "mean" más alto para cada grupo/nivel
     max_mean = df_stats.groupby(['Gr/Sb', 'Nivel'])['mean'].max().reset_index()
     max_mean.rename(columns={'mean': 'max_mean'}, inplace=True)
@@ -199,6 +217,12 @@ def plot_percentage_over_max():
 
 # Función para graficar los valores de "mean"
 def plot_mean_values():
+    df_stats = pd.read_excel(
+        io="/app/rpt/rpt_stats.xlsx",
+        sheet_name="statistics", # 0,
+        header=0,
+        )
+
     # Seleccionar los 5 ministerios con mayores y menores valores de "mean"
     top_5_ministerios = df_stats.groupby('Denominación Ministerio')['mean'].max().nlargest(5).index
     bottom_5_ministerios = df_stats.groupby('Denominación Ministerio')['mean'].max().nsmallest(5).index

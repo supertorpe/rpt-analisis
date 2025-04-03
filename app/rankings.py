@@ -1,14 +1,14 @@
 import pandas as pd
 import numpy as np
 
-# Cargar los datos del archivo Excel
-df_stats = pd.read_excel(
-    io="/app/rpt/rpt_stats.xlsx",
-    sheet_name="statistics", # 0,
-    header=0,
-    )
 
 def print_rankings():
+    df_stats = pd.read_excel(
+        io="/app/rpt/rpt_stats.xlsx",
+        sheet_name="statistics", # 0,
+        header=0,
+        )
+
     # Calcular el mean medio de todos los ministerios por Gr/Sb y Nivel
     mean_global = df_stats.groupby(["Gr/Sb", "Nivel"])["mean"].transform("mean")
 
