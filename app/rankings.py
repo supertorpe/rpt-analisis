@@ -9,30 +9,30 @@ def print_rankings():
         header=0,
         )
 
-    # Calcular el mean medio de todos los ministerios por Gr/Sb y Nivel
+    # Calculate the average mean of all ministries by Gr/Sb and Level
     mean_global = df_stats.groupby(["Gr/Sb", "Nivel"])["mean"].transform("mean")
 
-    # Obtener lista de ministerios únicos
+    # Get unique list of ministries
     ministerios = df_stats["Denominación Ministerio"].unique()
 
     resultados = []
 
     for ministerio in ministerios:
         df_min = df_stats[df_stats["Denominación Ministerio"] == ministerio]
-        
-        # Ordenar por Gr/Sb y Nivel
+
+        # Sort by Gr/Sb and Level
         df_min = df_min.sort_values(by=["Gr/Sb", "Nivel"])
-        
-        # Valores en X y Y
+
+        # Values for X and Y
         x = np.arange(len(df_min))
         y_media = (df_min["mean"] / mean_global[df_min.index]).mean()
             
         resultados.append((ministerio, y_media))
 
-    # Ordenar resultados
+    # Sort results
     resultados.sort(key=lambda x: x[1])
 
-    # Mostrar resultados
+    # Show results
     for ministerio, area in resultados:
         print(f"{ministerio}: {area:.2f}")
 

@@ -5,7 +5,8 @@ from utils import read_zip
 
 def gen_stats():
     output_file = '/app/rpt/rpt_stats.xlsx'
-    if os.path.exists(output_file):
+    output_file_2 = '/app/rpt/rpt_stats_2.xlsx'
+    if os.path.exists(output_file) and os.path.exists(output_file_2):
         print(f"File {output_file} already exists. Skipping generation.")
         return
         
@@ -15,5 +16,17 @@ def gen_stats():
         header=0,
         skiprows=[0,1,2] )
 
-    stats = rpt.groupby(["Denominación Ministerio", "Gr/Sb", "Nivel"])["C.Específ."].agg(["count","min", "max", "mean"]).round(0).astype(int).reset_index()
-    stats.to_excel(output_file, index=False, sheet_name="statistics")
+    af_col = rpt.columns[31]
+    rpt = rpt[rpt[af_col] != "V"]
+    print(rpt.columns)
+
+    if not os.path.exists(output_file):
+        stats = rpt.groupby(["Denominación Ministerio", "Gr/Sb", "Nivel"])["C.Específ."].agg(["count","min", "max", "mean"]).round(0).astype(int).reset_index()
+        stats.to_excel(output_file, index=False, sheet_name="statistics")
+
+    if not os.path.exists(output_file_2):
+        stats = rpt.groupby(["Denominación Ministerio", "Denominación Larga", "Gr/Sb", "Nivel"])["C.Específ."].agg(["count","min", "max", "mean"]).round(0).astype(int).reset_index()
+        stats.to_excel(output_file_2, index=False, sheet_name="statistics")
+
+
+
